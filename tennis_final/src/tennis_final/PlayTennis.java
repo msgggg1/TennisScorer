@@ -1,6 +1,5 @@
 package tennis_final;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -8,30 +7,9 @@ import java.util.Scanner;
 //타이브레이크 선택(x,전체 세트, 마지막 세트만), 타이브레이크 점수 선택 추가, no-Ad 규칙 추가
 public class PlayTennis {
 
-	public static void main(String[] args) throws IOException, ClassNotFoundException {
+	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
 		ScoreBoard scoreboard = null;
-		String loadOption;
-
-		// 유효한 입력을 받을 때까지 반복
-		while (true) {
-			System.out.print("세이브된 게임을 불러오시겠습니까? (네/아니오): ");
-			loadOption = scanner.nextLine().toLowerCase();
-			
-			if (loadOption.equals("네") || loadOption.equals("아니오")) break; // 올바른 입력이면 루프 종료
-			System.out.println("잘못된 입력!!! '네' or '아니오'.");
-		}
-
-		if (loadOption.equals("네")) {
-			try {
-				scoreboard = GameSave.loadGame();
-				System.out.println("성공적으로 불러왔습니다!");
-				scoreboard.displayScoreBoard();
-			} catch (IOException | ClassNotFoundException e) {
-				System.out.println("로딩 에러: " + e.getMessage());
-				return;
-			}
-		} else { // "no"인 경우
 			// 새로운 게임 설정
 			String gender;
 			while (true) {
@@ -173,10 +151,10 @@ public class PlayTennis {
 			scoreboard = new ScoreBoard(team1, team2, totalSets,
 					isDoubles, isMale,
 					tieBreakMode, tieBreakPoints, noAd);
-		}
+		
 
 		while (true) {
-			System.out.println("\n선택옵션: [1] Press \"Enter\" = 경기진행 [2] Press '2' = 게임저장 [3] Press '3' = 나가기");
+			System.out.println("\n선택옵션: [1] Press \"Enter\" = 경기진행 [2] Press '3' = 나가기");
 			System.out.print("선택옵션 : ");
 			String option = scanner.nextLine();
 
@@ -185,14 +163,6 @@ public class PlayTennis {
 			case "": // enter
 				int winner = new Random().nextInt(2) + 1;
 				scoreboard.pointScored(winner);
-				break;
-			case "2":
-				try {
-					GameSave.saveGame(scoreboard);
-					System.out.println("저장완료!");
-				} catch (IOException e) {
-					System.out.println("저장실패: " + e.getMessage());
-				}
 				break;
 			case "3":
 				System.out.println("나가기!");

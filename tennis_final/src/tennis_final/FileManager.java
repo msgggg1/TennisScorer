@@ -28,6 +28,7 @@ public class FileManager {
     			, board.isMale? "남자" : "여자", board.isDoubles?"복식":"단식", board.tieBreakPoints == 0 ? "" : String.valueOf(board.tieBreakPoints)
     			, board.tieBreakMode==0 ? "타이브레이크 미적용": (board.tieBreakMode==1 ? "타이브레이크": "마지막 세트 타이브레이크"), board.noAd ? "": "노 애드(no-Ad)경기"));
     }
+    
     // 게임 기록 저장
     public void writeGameHistroy() {
     	StringBuilder sb = new StringBuilder();
@@ -39,6 +40,47 @@ public class FileManager {
     	appendScoreRecord(sb, board.team2.getName(), 1, board.tieBreak);
     	
     	sb.append("\n\n");
+        writeToFile(sb.toString());
+    }
+    
+    // 전체 게임 히스토리 저장 (경기 종료 시)
+    public void writeCompleteGameHistory() {
+    	StringBuilder sb = new StringBuilder();
+    	sb.append("=== 전체 게임 히스토리 ===\n");
+    	
+    	// 각 세트별 게임 기록
+    	for (int i = 0; i < board.gameHistoryList.get(0).size(); i++) {
+    		sb.append(String.format("게임 %d: %s %d - %s %d\n", 
+    			i + 1, 
+    			board.team1.getName(), 
+    			board.gameHistoryList.get(0).get(i),
+    			board.team2.getName(), 
+    			board.gameHistoryList.get(1).get(i)));
+    	}
+    	sb.append("\n");
+        writeToFile(sb.toString());
+    }
+    
+    // 전체 요약보고서 저장 (경기 종료 시)
+    public void writeCompleteSummary() {
+    	StringBuilder sb = new StringBuilder();
+    	sb.append("=== 경기 전체 요약보고서 ===\n");
+    	sb.append(String.format("경기 날짜: %s\n", d));
+    	sb.append(String.format("경기 유형: %s %s\n", board.isMale ? "남자" : "여자", board.isDoubles ? "복식" : "단식"));
+    	sb.append(String.format("총 세트 수: %d\n", board.totalSets));
+    	sb.append(String.format("타이브레이크: %s\n", 
+    		board.tieBreakMode == 0 ? "미적용" : 
+    		board.tieBreakMode == 1 ? "전체 세트" : "마지막 세트만"));
+    	if (board.tieBreakMode != 0) {
+    		sb.append(String.format("타이브레이크 포인트: %d\n", board.tieBreakPoints));
+    	}
+    	sb.append(String.format("노 애드 규칙: %s\n", board.noAd ? "적용" : "미적용"));
+    	sb.append(String.format("최종 결과: %s %d세트 - %s %d세트\n", 
+    		board.team1.getName(), board.team1.getSetsWon(),
+    		board.team2.getName(), board.team2.getSetsWon()));
+    	sb.append(String.format("승자: %s\n", 
+    		board.team1.getSetsWon() > board.team2.getSetsWon() ? board.team1.getName() : board.team2.getName()));
+    	sb.append("========================\n\n");
         writeToFile(sb.toString());
     }
     

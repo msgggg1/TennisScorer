@@ -1,23 +1,22 @@
 package tennis_final;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
-class ScoreBoard implements Serializable {  // 게임 데이터를 저장하고 다시 불러올 때 직렬화를 지원하기 위함.
-	Team team1 ;           // private 사용하여 내부 데이터 직접 접근 막음.   player2;
-	Team team2;
+class ScoreBoard {  // ScoreBoard class for managing tennis match scoring
+	Team team1 ;           // Team 1
+	Team team2;            // Team 2
 	private String team1Name, team2Name;
-	int totalSets;            // 경기의 총 세트 수 저장                   
+	int totalSets;            // Total number of sets in the match                   
 
-	boolean tieBreak;         // 현재 타이브레이크 진행 중 여부
-	int tieBreakMode;         // 0=미적용, 1=전체 세트, 2=마지막 세트만
-	int tieBreakPoints;       // 사용자 입력: 7 or 10 등
+	boolean tieBreak;         // Current tiebreak status
+	int tieBreakMode;         // 0=not applied, 1=all sets, 2=last set only
+	int tieBreakPoints;       // User input: 7 or 10 etc
 	boolean isDuece;
 
-	boolean isDoubles;        // 단/복식      
-	boolean isMale;           // 성별        
-	String scoreStatus;       // 전광판 점수 형식 
-	boolean noAd; 			  // No-Ad 규칙 사용 여부
+	boolean isDoubles;        // Singles/Doubles      
+	boolean isMale;           // Gender        
+	String scoreStatus;       // Scoreboard display format 
+	boolean noAd; 			  // No-Ad rule usage
 	
 	FileManager fileManager;
 	
@@ -248,10 +247,17 @@ class ScoreBoard implements Serializable {  // 게임 데이터를 저장하고 
 		// ex) 3세트 경기면 2세트 이상, 5세트 경기면 3세트 이상 이긴 쪽 승리
 		if (team1.getSetsWon() >= (totalSets / 2) + 1) {
 			System.out.println("\nMatch Over! Winner: " + team1.getName());
+			// 경기 종료 시 전체 요약보고서와 전체 게임 히스토리 저장
+			fileManager.writeCompleteSummary();
+			fileManager.writeCompleteGameHistory();
+			fileManager.writeFinalResult(); // 최종 결과 저장
 			System.exit(0); // 경기 종료
-			fileManager.writeFinalResult();
 		} else if (team2.getSetsWon() >= (totalSets / 2) + 1) {
 			System.out.println("\nMatch Over! Winner: " + team2.getName());
+			// 경기 종료 시 전체 요약보고서와 전체 게임 히스토리 저장
+			fileManager.writeCompleteSummary();
+			fileManager.writeCompleteGameHistory();
+			fileManager.writeFinalResult(); // 최종 결과 저장
 			System.exit(0);
 		}
 	}

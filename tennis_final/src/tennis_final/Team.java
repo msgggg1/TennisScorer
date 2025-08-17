@@ -1,11 +1,9 @@
 package tennis_final;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-						//Serializable : 객체를 바이트 스트림으로 변환할 수 있도록 하는 마커 인터페이스(marker interface)
-public class Team implements Serializable {//게임 데이터를 저장하고 다시 불러올 때 직렬화를 지원하기 위함.
-	//ScoreBoard 객체를 파일로 저장하려면 내부에 있는 Player 객체도 직렬화 가능해야 하므로, 
-	//Player도 Serializable 구현
+						//Team class for managing team information
+public class Team {
+	//Team class for managing team information
 	private String teamName;
 	private int points;
 	private int gamesWon;
